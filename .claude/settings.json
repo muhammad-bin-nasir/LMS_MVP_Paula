@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(sed -i '774,1398d' /home/muhammad/WinDrives/Office/Paula_LMS/Website/resources/views/frontend/infixlmstheme/pages/customer_help.blade.php *)",
+      "Bash(php -l resources/views/frontend/infixlmstheme/pages/customer_help.blade.php)",
+      "Bash(php -l routes/tenant.php)",
+      "Bash(php -l app/Http/Controllers/Frontend/WebsiteController.php)",
+      "Bash(php -l resources/views/frontend/infixlmstheme/pages/privacy_policy_page.blade.php)",
+      "Bash(php -l resources/views/frontend/infixlmstheme/partials/_custom_footer.blade.php)"
+    ],
+    "additionalDirectories": [
+      "/home/muhammad/WinDrives/Office/Paula_LMS/Website/resources/views/frontend/infixlmstheme/pages"
+    ]
+  }
+}

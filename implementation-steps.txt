@@ -1,0 +1,140 @@
+MERKAII XCELLENCE PREP — IMPLEMENTATION STEPS (PHASES 2–6)
+=============================================================
+Note: the handoff doc has two sections both labeled "Phase 6" — E-Commerce (cart.html, checkout.html, listed as already built) and Account & Gated Pages (login.html, dashboard.html, order-confirmation.html, listed as not yet built). "Phase 6" below refers to E-Commerce, since it's next in sequence; the Account & Gated Pages section is really Phase 6 of the "not yet built" list and should be scoped separately when reached.
+
+PHASE 2 — Program & Legal Pages
+--------------------------------
+Why: Privacy/Terms already have a live CMS content field to edit, so those need no new code — the 3 program pages and Disclaimer have no live equivalent at all, so those need full new pages built from scratch.
+1. Privacy Policy — convert privacy.html content to plain HTML, paste into admin CMS editor (Privacy Policy field). No route needed.
+   Placement: replaces the content of the existing live page at /pages/privacy-policy. No new route.
+2. Terms of Service — convert terms.html content to plain HTML, paste into admin CMS editor (FrontPage slug "terms"). No route needed.
+   Placement: replaces the content of the existing live page at /pages/terms. No new route.
+3. Disclaimer — create new FrontPage row (slug "disclaimer") in admin. Convert disclaimer.html content to plain HTML, paste into its details field.
+   Placement: new page. No new route needed in code — becomes reachable automatically at /pages/disclaimer via the existing generic pages/{slug} route once the FrontPage row exists.
+4. NCLEX Coaching — build new Blade view + controller method + route (/nclex-coaching).
+   Placement: new page, new route: GET /nclex-coaching (name: nclexCoaching).
+5. Nursing School — build new Blade view + controller method + route (/nursing-school).
+   Placement: new page, new route: GET /nursing-school (name: nursingSchool).
+6. Nursing Comeback — decide: add a Program DB record so it appears on /programs, or leave it reachable only via internal links from Nursing School. Then build new Blade view + controller method + route (/nursing-comeback). Must go live same time as or before Nursing School's links to it.
+   Placement: new page, new route: GET /nursing-comeback (name: nursingComeback). No catalog entry point exists yet — see Open Questions.
+7. Add "Details" buttons on the /programs catalog cards for NCLEX Coaching and Nursing School, linking to their new routes.
+   Placement: modifies the existing live /programs page — not a new page, just new links added to existing cards.
+8. Add Disclaimer link to site footer once its FrontPage row exists.
+   Placement: modifies the existing shared footer component — not a new page.
+
+
+PHASE 3 — Revenue & Conversion
+--------------------------------
+Why: courses, tutoring, and shop already have real live catalogs/detail pages and a working cart, so most of this phase is restyling and reconnecting existing pages/buttons rather than building new backend logic — only the Starter Kit is a genuine new page.
+1. Decide which live catalog (/courses or /prep-courses) is the real prep-course catalog, then restyle it to match courses.html.
+   Placement: replaces the design of an existing live page (either /courses or /prep-courses, once confirmed). No new route.
+2. Restyle the matching course-detail route (courseDetailsView or quizDetailsView) to match course-detail.html, using real course data. Point "Enroll Now" at the real add-to-cart route.
+   Placement: replaces the design of an existing live page (courses-details/{slug} or quiz-details/{slug}). No new route.
+3. Link each course card on the catalog page to its own course-detail route (course-detail.html currently uses one shared mockup linked via a ?course= query param from 21 cards — replace with real per-course detail URLs/slugs).
+   Placement: modifies the existing catalog page's card links. No new page/route.
+4. Decide whether existing /instructors + /packages pages already cover Tutoring Landing, or build a new /tutoring page linking into both.
+   Placement: undecided — either no new page (existing pages cover it), or new page with new route GET /tutoring. See Open Questions.
+5. Wire Tutoring/booking CTAs to the real booking flow once available (Calendly/Acuity), not to contact.html.
+   Placement: modifies existing/new Tutoring page's CTA targets. No new page.
+6. Decide which route (/instructorDetails or /tutorDetails) is the intended tutor-profile page, then restyle it to match tutor-profile.html using real instructor data. Point "Book This Instructor" at the real tutorBooking route.
+   Placement: replaces the design of an existing live page (instructorDetails/{id}/{name} or tutorDetails/{id}/{name}, once confirmed). No new route.
+7. Reconcile shop.html vs "NRPlanner shop.html" into one final design, then restyle the live /shop page to match, using real ShopProduct records.
+   Placement: replaces the design of the existing live page at /shop. No new route.
+8. Restyle the live product-detail page to match product-detail.html using real product data. Fix "Add to Cart" to call the real shop/addToCart/{id} route instead of being disabled.
+   Placement: replaces the design of the existing live page at shop/product/detail/{id} (or shop/book/detail/{id}). No new route.
+9. Link each product card on the shop page to its own product-detail route (shop.html's "View Details" links are currently dead href="#" placeholders on every card — same missing-redirection issue Phase 2 fixed on /programs).
+   Placement: modifies the existing /shop page's card links. No new page/route.
+10. Build new Starter Kit page (full page, new route) matching starter-kit.html.
+    Placement: new page, new route: GET /starter-kit (name to be chosen, e.g. starterKit).
+11. Pick an email platform (Kit/MailerLite/Flodesk — not Mailchimp) and wire the Starter Kit email form to it.
+    Placement: modifies the new Starter Kit page's form target. No additional page/route.
+
+
+PHASE 4 — Content & Trust
+----------------------------
+Why: only the Blog is a real, live feature here — Team, NCLEX PASS Method, Credentials, Success Stories, Community, FAQ, and Resources all have no dedicated page today (FAQ/testimonials exist only as fragments embedded in other pages), so most of this phase is new-page builds rather than restyles.
+1. Build new Team & Instructors page (new route) matching team.html.
+   Placement: new page, new route: GET /team (or /our-team).
+2. Link each team member card to its own tutor-profile route (team.html currently only links the founder's card to tutor-profile.html — other member cards need the same treatment once real instructor pages exist).
+   Placement: modifies the new Team page's card links. No additional page/route.
+3. Build new NCLEX PASS Method page (new route) matching nclex-pass-method.html. Then trim nclex-coaching.html's methodology section to link out to it instead of duplicating content.
+   Placement: new page, new route: GET /nclex-pass-method. Also modifies the existing NCLEX Coaching page's methodology section (trims it, adds a link) — see Open Questions on section-vs-page.
+4. Build new Credentials page (new route) matching credentials.html. Confirm actual license/accreditation details with the business before publishing.
+   Placement: new page, new route: GET /credentials (or /approvals).
+5. Build new Success Stories page (new route) matching success-stories.html, using real student testimonials (with permission).
+   Placement: new page, new route: GET /success-stories.
+6. Decide: is Community a marketing-only page, or the front door to a real forum feature (see "Community - MXP" folder draft)? Scope accordingly before building.
+   Placement: undecided — either new page with new route GET /community (marketing-only), or a much larger new feature with its own route structure (auth-gated forum). See Open Questions.
+7. Restyle the live blog index and blog-post routes to match blog.html / blog-post.html, using real Blog model records.
+   Placement: replaces the design of existing live pages (/articles and blog-details/{slug}). No new route.
+8. Link each blog card on the index page to its own post route (blog.html currently links all 7 sample article cards to the same single blog-post.html — replace with real per-post slugs).
+   Placement: modifies the existing blog index page's card links. No new page/route.
+9. Confirm whether the Faq/HomePageFaq models support category grouping; if not, flag schema gap. Build new FAQ page (new route) pulling from that DB data instead of hardcoding Q&As.
+   Placement: new page, new route: GET /faq.
+10. Build new Free Resources Hub page (new route) matching resources.html, linking to the live Blog and to Starter Kit.
+    Placement: new page, new route: GET /resources.
+11. Wire Resources Hub and Blog into the same email-capture platform chosen in Phase 3.
+    Placement: modifies existing/new pages' form targets. No additional page/route.
+
+
+PHASE 5 — Conversion & Recruitment
+--------------------------------------
+Why: both pages are new routes, but each should reuse an existing real backend (the live contact-form submission, and the live tutor-registration flow) instead of building parallel systems, since those already do most of what these pages need.
+1. Build new Get Started page (new route) matching get-started.html. Point its form at the existing POST /contact-submit route instead of building a new submission path.
+   Placement: new page, new route: GET /get-started. Form submits to the existing POST /contact-submit route — no new submission route.
+2. Check get-started.html's intake fields against the ContactMessage model's existing columns; add a migration for any missing fields.
+   Placement: modifies the existing ContactMessage table/model. No page/route change.
+3. Pick a calendar booking platform (Calendly/Acuity/other) and wire it into the Get Started page — no such integration currently exists.
+   Placement: modifies the new Get Started page (adds an embed/integration). No additional page/route.
+4. Decide: restyle the existing /teach-with-us page to match become-a-tutor.html (keeps instant self-registration via the register() flow), or build become-a-tutor.html as a new reviewed-application page (new route + new application table + admin review step + later account creation).
+   Placement: undecided — either replaces the existing /teach-with-us page's design (no new route), or a genuinely new page with new route GET /become-a-tutor + new application table + new admin review UI. See Open Questions.
+5. Implement whichever path was chosen in step 4.
+   Placement: depends entirely on the decision in step 4.
+
+
+PHASE 6 — E-Commerce (Cart & Checkout)
+--------------------------------------------
+Why: both /my-cart and /checkout are already live and functional (real cart, real coupon/tax/total logic, real AuthorizeNet payment), so this phase is restyling existing pages and closing real feature gaps (quantities, visible cart totals, an order-confirmation page) rather than building new e-commerce logic from scratch.
+1. Restyle myCart.blade.php (via my-cart-with-login-page-section.blade.php) to match cart.html's layout.
+   Placement: replaces the design of the existing live page at /my-cart. No new route.
+2. Add a visible subtotal/total line to the cart page — $totalSum is already calculated in the existing code but never displayed.
+   Placement: modifies the existing /my-cart page. No new page/route.
+3. Decide whether to add quantity support (increment/decrement, stackable line items) to match cart.html's qty controls, since the live cart currently only supports one-of-each removable line items with no qty field at all.
+   Placement: modifies the existing /my-cart page and the Cart model/table (new qty column). No new page/route.
+4. Restyle checkout-page-section.blade.php to match checkout.html's billing form + order summary layout, keeping its existing real subtotal/coupon/discount/tax logic intact.
+   Placement: replaces the design of the existing live page at /checkout. No new route.
+5. Decide whether to keep the live checkout's separate two-step flow (billing form → redirect to a separate /payment page for card entry) or consolidate it into checkout.html's single-page design — this is a structural difference, not just styling.
+   Placement: undecided — either keeps both existing pages (/checkout and /payment) as-is, or merges /payment's content into /checkout and removes the separate route. See Open Questions.
+6. If consolidating to one page: move the AuthorizeNet card form (currently on the separate payment-page-section.blade.php) into the checkout page itself, or confirm the two-step flow is intentional and restyle both pages separately instead.
+   Placement: depends entirely on the decision in step 5.
+7. Build a real order-confirmation/thank-you page — none currently exists; checkout success just flashes a toast and redirects to the dashboard or homepage.
+   Placement: new page, new route (e.g. GET /order-confirmation), plus a redirect change in PaymentController's success branches to point here instead of the dashboard/homepage.
+8. Confirm AuthorizeNet is the intended production gateway (it's the only one actually rendered on the live payment page, despite several other gateway modules existing in the codebase) before finalizing the checkout redesign around it.
+   Placement: no page/route change — a configuration/business confirmation only.
+
+
+OPEN QUESTIONS / UNKNOWNS (pages with no unambiguous page-type, routing, or implementation path)
+====================================================================================================
+These are the specific cases across all phases where it isn't clear whether something is a full page or a page section, where a page has no unambiguous route/entry point, or where two competing implementations exist and must be reconciled before building.
+
+PHASE 2
+- Nursing Comeback has no catalog card and no Program DB record on /programs — unlike NCLEX Coaching and Nursing School, there is currently no unambiguous entry point to it at all. Needs a decision: create a Program DB record so it gets a card, or accept it as reachable only via internal text links from the Nursing School page.
+
+PHASE 3
+- Courses Catalog: two live catalog systems exist (/courses using the Course model, /prep-courses using the Quiz model) and it's unclear which one courses.html is actually meant to restyle — they may hold different real data. Must confirm which one before touching either.
+- Tutor Profile: two live routes exist (/instructorDetails and /tutorDetails) and it's unclear which is the intended target for tutor-profile.html — they may serve different instructor/tutor types.
+- Shop Landing: two competing designs exist (shop.html and "NRPlanner shop.html") with genuinely different content (the NRPlanner version has a real featured-product/discount feature the other doesn't) — not just drafts of the same page, so one must be chosen as canonical.
+- Tutoring Landing: not clear whether this should be a new standalone page at all, or just a styled wrapper linking into the two existing pages (/instructors and /packages) that already partially cover it. Needs a decision on scope before starting.
+
+PHASE 4
+- Community: not clear whether this is meant to be a marketing-only page (safe to build now) or the front door to a real forum feature that doesn't exist yet (found only as a disabled module toggle in the DB, with a separate more complete forum design sitting in the "Community - MXP" folder, outside any phase). Building the marketing page without the real feature behind it risks promising something that doesn't work. Needs a business decision before any build.
+- FAQ: unclear whether either existing Faq model or HomePageFaq model actually supports the category grouping the mockup expects (6 categories) — if neither does, this becomes a schema decision, not just a page build.
+- NCLEX PASS Method: unclear whether this should be a full standalone page (as scoped) or just a page section — a shorter version of the same content already exists embedded inside nclex-coaching.html. Needs a decision on whether the shorter version stays as its own section or gets trimmed to link out to this page once it exists, to avoid maintaining the same content twice.
+- Success Stories: same ambiguity as above — a full standalone page is scoped, but testimonial excerpts already exist as sections embedded in each program page. Same trim-or-duplicate decision applies.
+
+PHASE 5
+- Become a Tutor: not clear whether this should reuse the existing /teach-with-us page (which immediately creates a full user account on submit) or become a genuinely new page with a different flow (application stored for review, account created only later). These are two different account-creation behaviors, not just two different designs — the mockup's own framing ("apply to join") doesn't match what the existing live page actually does. Needs a product decision, not a styling decision.
+
+PHASE 6
+- Checkout: not clear whether the live app's existing two-step flow (billing form, then a separate /payment page for card entry) should stay as two pages, or be consolidated into checkout.html's single-page design. This is a structural decision that changes how much of the existing checkout code needs to move, not just a restyle.
+- No order-confirmation/thank-you page exists anywhere in the live app right now — there's no ambiguity about whether to build one, only that it's currently entirely missing with no fallback beyond a toast message.
